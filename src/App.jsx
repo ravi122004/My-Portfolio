@@ -15,7 +15,7 @@ const SKILLS = [
   { name: "Git / GitHub", level: 82, cat: "Tools" },
 ];
 const PROJECTS = [
-  { title: "FitTrack Pro", desc: "Gamified fitness tracking platform with secure auth, REST APIs, MySQL + JSON data handling, and responsive UI with Tailwind CSS.", tags: ["PHP", "MySQL", "Tailwind", "JavaScript"], num: "01" },
+  { title: "FitTrack Pro", desc: "Gamified fitness tracking platform with secure auth, REST APIs, MySQL + JSON data handling, and responsive UI with Tailwind CSS.", tags: ["PHP", "MySQL", "Tailwind", "JS"], num: "01" },
   { title: "InvestBot", desc: "Full-stack AI investment advisory chatbot using Flask & Gemini API with real-time streaming, SQLite backend, and glass-effect UI.", tags: ["Flask", "Gemini API", "SQLite", "Python"], num: "02" },
   { title: "DSA with C++", desc: "Structured GitHub repo covering all major DSA topics — arrays, linked lists, trees, graphs — with clean C++ implementations.", tags: ["C++", "DSA", "GitHub"], num: "03" },
 ];
@@ -28,27 +28,23 @@ const CERTS = [
   { icon: "🌐", title: "Coursera", sub: "Bits & Bytes of Networking" },
 ];
 
-// ── Theme tokens ──────────────────────────────────────
 const LIGHT = {
-  bg: "#ffffff", bg2: "#fafafa", bg3: "#f5f5f5",
-  text: "#111111", text2: "#555555", text3: "#888888",
-  border: "#ebebeb", navBg: "rgba(255,255,255,0.95)",
-  cardBg: "#ffffff", inputBg: "#f8f8f8",
-  accent: "#e8372a", tickerBg: "#111111", tickerText: "#ffffff",
-  shadow: "0 2px 12px rgba(0,0,0,0.06)",
-  skillTrack: "#ebebeb",
+  bg:"#ffffff", bg2:"#fafafa", bg3:"#f5f5f5",
+  text:"#111111", text2:"#555555", text3:"#888888",
+  border:"#ebebeb", navBg:"rgba(255,255,255,0.95)",
+  cardBg:"#ffffff", inputBg:"#f8f8f8",
+  accent:"#e8372a", tickerBg:"#111111", tickerText:"#ffffff",
+  shadow:"0 2px 12px rgba(0,0,0,0.06)", skillTrack:"#ebebeb",
 };
 const DARK = {
-  bg: "#0d0d0d", bg2: "#141414", bg3: "#1a1a1a",
-  text: "#f0f0f0", text2: "#b0b0b0", text3: "#777777",
-  border: "#2a2a2a", navBg: "rgba(13,13,13,0.95)",
-  cardBg: "#1a1a1a", inputBg: "#1a1a1a",
-  accent: "#e8372a", tickerBg: "#e8372a", tickerText: "#ffffff",
-  shadow: "0 2px 20px rgba(0,0,0,0.4)",
-  skillTrack: "#2a2a2a",
+  bg:"#0d0d0d", bg2:"#141414", bg3:"#1a1a1a",
+  text:"#f0f0f0", text2:"#b0b0b0", text3:"#666666",
+  border:"#2a2a2a", navBg:"rgba(13,13,13,0.95)",
+  cardBg:"#1a1a1a", inputBg:"#1a1a1a",
+  accent:"#e8372a", tickerBg:"#e8372a", tickerText:"#ffffff",
+  shadow:"0 2px 20px rgba(0,0,0,0.4)", skillTrack:"#2a2a2a",
 };
 
-// ── Hooks ──────────────────────────────────────────────
 function useInView(threshold = 0.1) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -60,6 +56,17 @@ function useInView(threshold = 0.1) {
   return [ref, visible];
 }
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return mobile;
+}
+
 function Counter({ target, suffix = "" }) {
   const [count, setCount] = useState(0);
   const [ref, visible] = useInView(0.5);
@@ -67,17 +74,16 @@ function Counter({ target, suffix = "" }) {
     if (!visible) return;
     let n = 0;
     const step = Math.ceil(target / 60);
-    const t = setInterval(() => {
+    const timer = setInterval(() => {
       n += step;
-      if (n >= target) { setCount(target); clearInterval(t); } else setCount(n);
+      if (n >= target) { setCount(target); clearInterval(timer); } else setCount(n);
     }, 20);
-    return () => clearInterval(t);
+    return () => clearInterval(timer);
   }, [visible, target]);
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
-// ── Particle canvas ────────────────────────────────────
-function ParticleCanvas({ dark }) {
+function ParticleCanvas() {
   const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -86,10 +92,11 @@ function ParticleCanvas({ dark }) {
     const resize = () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; };
     resize();
     window.addEventListener("resize", resize);
-    const particles = Array.from({ length: 50 }, () => ({
+    const count = window.innerWidth < 768 ? 25 : 50;
+    const particles = Array.from({ length: count }, () => ({
       x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
-      r: Math.random() * 2 + 1, alpha: Math.random() * 0.35 + 0.08,
+      vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4,
+      r: Math.random()*2+1, alpha: Math.random()*0.35+0.08,
     }));
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -97,16 +104,16 @@ function ParticleCanvas({ dark }) {
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
         ctx.fillStyle = `rgba(232,55,42,${p.alpha})`; ctx.fill();
       });
       for (let i = 0; i < particles.length; i++)
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
-          const d = Math.sqrt(dx*dx + dy*dy);
+        for (let j = i+1; j < particles.length; j++) {
+          const dx = particles[i].x-particles[j].x, dy = particles[i].y-particles[j].y;
+          const d = Math.sqrt(dx*dx+dy*dy);
           if (d < 110) {
             ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(232,55,42,${(1 - d/110) * 0.1})`; ctx.lineWidth = 1; ctx.stroke();
+            ctx.strokeStyle = `rgba(232,55,42,${(1-d/110)*0.1})`; ctx.lineWidth = 1; ctx.stroke();
           }
         }
       animId = requestAnimationFrame(draw);
@@ -117,14 +124,13 @@ function ParticleCanvas({ dark }) {
   return <canvas ref={canvasRef} style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none" }} />;
 }
 
-// ── Skill bar ──────────────────────────────────────────
 function SkillBar({ name, level, cat, delay, t }) {
   const [ref, visible] = useInView();
   return (
-    <div ref={ref} style={{ marginBottom:"1.5rem", opacity:visible?1:0, transform:visible?"translateX(0)":"translateX(-24px)", transition:`all 0.6s ease ${delay}s` }}>
-      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"0.45rem" }}>
-        <span style={{ fontWeight:600, fontSize:"0.88rem", color:t.text }}>{name}</span>
-        <span style={{ fontSize:"0.72rem", color:t.accent, fontWeight:700, textTransform:"uppercase", letterSpacing:"0.05em" }}>{cat} · {level}%</span>
+    <div ref={ref} style={{ marginBottom:"1.4rem", opacity:visible?1:0, transform:visible?"translateX(0)":"translateX(-20px)", transition:`all 0.6s ease ${delay}s` }}>
+      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"0.4rem" }}>
+        <span style={{ fontWeight:600, fontSize:"0.85rem", color:t.text }}>{name}</span>
+        <span style={{ fontSize:"0.7rem", color:t.accent, fontWeight:700, textTransform:"uppercase" }}>{cat} · {level}%</span>
       </div>
       <div style={{ background:t.skillTrack, borderRadius:"4px", height:"4px", overflow:"hidden" }}>
         <div style={{ height:"100%", borderRadius:"4px", background:"linear-gradient(90deg,#e8372a,#ff6b5b)", width:visible?`${level}%`:"0%", transition:`width 1.2s cubic-bezier(0.4,0,0.2,1) ${delay+0.2}s` }} />
@@ -133,61 +139,59 @@ function SkillBar({ name, level, cat, delay, t }) {
   );
 }
 
-// ── Project card ───────────────────────────────────────
 function ProjectCard({ project, delay, t }) {
   const [ref, visible] = useInView();
   const [hov, setHov] = useState(false);
   return (
     <div ref={ref} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-      style={{ borderTop:`2px solid ${hov?"#e8372a":t.border}`, padding:"2rem 0", opacity:visible?1:0, transform:visible?"translateY(0)":"translateY(36px)", transition:`all 0.6s ease ${delay}s` }}>
-      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"1rem" }}>
-        <span style={{ fontSize:"0.7rem", fontWeight:900, color:t.accent, letterSpacing:"0.14em", background:hov?"#e8372a22":"transparent", padding:"0.25rem 0.6rem", borderRadius:"4px" }}>{project.num}</span>
-        <span style={{ fontSize:"1.2rem", transform:hov?"translate(5px,-5px)":"none", transition:"transform 0.3s", color:t.accent }}>↗</span>
+      style={{ borderTop:`2px solid ${hov?"#e8372a":t.border}`, padding:"1.75rem 0", opacity:visible?1:0, transform:visible?"translateY(0)":"translateY(30px)", transition:`all 0.6s ease ${delay}s` }}>
+      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"0.85rem" }}>
+        <span style={{ fontSize:"0.7rem", fontWeight:900, color:t.accent, letterSpacing:"0.12em", background:hov?"#e8372a22":"transparent", padding:"0.2rem 0.55rem", borderRadius:"4px" }}>{project.num}</span>
+        <span style={{ fontSize:"1.1rem", transform:hov?"translate(4px,-4px)":"none", transition:"transform 0.3s", color:t.accent }}>↗</span>
       </div>
-      <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"1.4rem", fontWeight:700, color:t.text, marginBottom:"0.7rem" }}>{project.title}</h3>
-      <p style={{ color:t.text2, fontSize:"0.86rem", lineHeight:1.8, marginBottom:"1.25rem" }}>{project.desc}</p>
-      <div style={{ display:"flex", flexWrap:"wrap", gap:"0.5rem" }}>
+      <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"1.25rem", fontWeight:700, color:t.text, marginBottom:"0.6rem" }}>{project.title}</h3>
+      <p style={{ color:t.text2, fontSize:"0.84rem", lineHeight:1.78, marginBottom:"1.1rem" }}>{project.desc}</p>
+      <div style={{ display:"flex", flexWrap:"wrap", gap:"0.45rem" }}>
         {project.tags.map(tag => (
-          <span key={tag} style={{ background:hov?"#e8372a":t.bg3, color:hov?"#fff":t.text2, borderRadius:"4px", padding:"0.22rem 0.7rem", fontSize:"0.7rem", fontWeight:700, letterSpacing:"0.04em", transition:"all 0.3s" }}>{tag}</span>
+          <span key={tag} style={{ background:hov?"#e8372a":t.bg3, color:hov?"#fff":t.text2, borderRadius:"4px", padding:"0.2rem 0.6rem", fontSize:"0.68rem", fontWeight:700, transition:"all 0.3s" }}>{tag}</span>
         ))}
       </div>
     </div>
   );
 }
 
-// ── Cert card ──────────────────────────────────────────
 function CertCard({ cert, delay, t }) {
   const [ref, visible] = useInView();
   const [hov, setHov] = useState(false);
   return (
     <div ref={ref} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-      style={{ background:hov?"#e8372a":t.cardBg, border:`1.5px solid ${hov?"#e8372a":t.border}`, borderRadius:"14px", padding:"1.4rem 1.6rem", opacity:visible?1:0, transform:visible?"scale(1)":"scale(0.9)", transition:`all 0.5s ease ${delay}s`, boxShadow:hov?"0 12px 40px #e8372a33":t.shadow }}>
-      <div style={{ fontSize:"1.8rem", marginBottom:"0.6rem" }}>{cert.icon}</div>
-      <div style={{ fontWeight:700, fontSize:"0.9rem", color:hov?"#fff":t.text, marginBottom:"0.2rem" }}>{cert.title}</div>
-      <div style={{ fontSize:"0.75rem", color:hov?"rgba(255,255,255,0.8)":t.text3, lineHeight:1.5 }}>{cert.sub}</div>
+      style={{ background:hov?"#e8372a":t.cardBg, border:`1.5px solid ${hov?"#e8372a":t.border}`, borderRadius:"12px", padding:"1.2rem 1.3rem", opacity:visible?1:0, transform:visible?"scale(1)":"scale(0.92)", transition:`all 0.5s ease ${delay}s`, boxShadow:hov?"0 12px 36px #e8372a33":t.shadow }}>
+      <div style={{ fontSize:"1.6rem", marginBottom:"0.5rem" }}>{cert.icon}</div>
+      <div style={{ fontWeight:700, fontSize:"0.85rem", color:hov?"#fff":t.text, marginBottom:"0.2rem" }}>{cert.title}</div>
+      <div style={{ fontSize:"0.72rem", color:hov?"rgba(255,255,255,0.8)":t.text3, lineHeight:1.5 }}>{cert.sub}</div>
     </div>
   );
 }
 
-// ── Dark/Light toggle button ───────────────────────────
 function ThemeToggle({ dark, setDark }) {
   return (
-    <button onClick={() => setDark(d => !d)}
-      style={{ width:"44px", height:"24px", borderRadius:"100px", border:"none", cursor:"pointer", position:"relative", background:dark?"#e8372a":"#ddd", transition:"background 0.3s", flexShrink:0 }}>
-      <span style={{ position:"absolute", top:"3px", left:dark?"22px":"3px", width:"18px", height:"18px", borderRadius:"50%", background:"#fff", transition:"left 0.3s", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"10px" }}>
-        {dark ? "🌙" : "☀️"}
+    <button onClick={()=>setDark(d=>!d)}
+      style={{ width:"42px", height:"23px", borderRadius:"100px", border:"none", cursor:"pointer", position:"relative", background:dark?"#e8372a":"#ddd", transition:"background 0.3s", flexShrink:0 }}>
+      <span style={{ position:"absolute", top:"2.5px", left:dark?"21px":"2.5px", width:"18px", height:"18px", borderRadius:"50%", background:"#fff", transition:"left 0.3s", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"10px" }}>
+        {dark?"🌙":"☀️"}
       </span>
     </button>
   );
 }
 
-// ── Main ───────────────────────────────────────────────
 export default function Portfolio() {
   const [dark, setDark] = useState(false);
   const t = dark ? DARK : LIGHT;
+  const isMobile = useIsMobile();
   const [scrolled, setScrolled] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mousePos, setMousePos] = useState({ x:0, y:0 });
   const [activeSection, setActiveSection] = useState("About");
   const [typedText, setTypedText] = useState("");
   const [cursorBlink, setCursorBlink] = useState(true);
@@ -206,37 +210,44 @@ export default function Portfolio() {
       } else {
         charIdx.current--;
         setTypedText(phrase.slice(0, charIdx.current));
-        if (charIdx.current === 0) { deleting.current = false; phraseIdx.current = (phraseIdx.current + 1) % phrases.length; return 400; }
+        if (charIdx.current === 0) { deleting.current = false; phraseIdx.current = (phraseIdx.current+1)%phrases.length; return 400; }
       }
       return deleting.current ? 55 : 80;
     };
     let timeout;
-    const run = () => { const delay = tick(); timeout = setTimeout(run, delay); };
+    const run = () => { const d = tick(); timeout = setTimeout(run, d); };
     timeout = setTimeout(run, 600);
     return () => clearTimeout(timeout);
   }, []);
 
-  useEffect(() => { const t = setInterval(() => setCursorBlink(b => !b), 530); return () => clearInterval(t); }, []);
+  useEffect(() => { const t = setInterval(()=>setCursorBlink(b=>!b), 530); return ()=>clearInterval(t); }, []);
   useEffect(() => {
-    const onMove = (e) => setMousePos({ x: e.clientX / window.innerWidth - 0.5, y: e.clientY / window.innerHeight - 0.5 });
+    if (isMobile) return;
+    const onMove = (e) => setMousePos({ x:e.clientX/window.innerWidth-0.5, y:e.clientY/window.innerHeight-0.5 });
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  }, [isMobile]);
   useEffect(() => {
-    setTimeout(() => setHeroVisible(true), 80);
-    const onScroll = () => setScrolled(window.scrollY > 30);
+    setTimeout(()=>setHeroVisible(true), 80);
+    const onScroll = ()=>setScrolled(window.scrollY>30);
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    return ()=>window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollTo = (id) => { document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior:"smooth" }); setActiveSection(id); };
+  const scrollTo = (id) => {
+    document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior:"smooth" });
+    setActiveSection(id); setMenuOpen(false);
+  };
 
   const [aboutRef, aboutV] = useInView();
-  const [statsRef, statsV] = useInView(0.3);
+  const [statsRef, statsV] = useInView(0.2);
   const [skillsRef, skillsV] = useInView();
   const [projRef, projV] = useInView();
   const [certsRef, certsV] = useInView();
   const [contactRef, contactV] = useInView();
+
+  const px = isMobile ? "1.25rem" : "clamp(1.5rem,6vw,6rem)";
+  const sectionPad = isMobile ? "4rem 1.25rem" : "8rem clamp(1.5rem,6vw,6rem)";
 
   return (
     <div style={{ background:t.bg, minHeight:"100vh", color:t.text, fontFamily:"'DM Sans',sans-serif", overflowX:"hidden", transition:"background 0.4s, color 0.4s" }}>
@@ -246,171 +257,185 @@ export default function Portfolio() {
         html { scroll-behavior:smooth; }
         ::-webkit-scrollbar { width:3px; }
         ::-webkit-scrollbar-thumb { background:#e8372a; border-radius:2px; }
-        .nav-link { font-size:0.87rem; font-weight:500; cursor:pointer; transition:color 0.2s; position:relative; }
-        .nav-link::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px; background:#e8372a; transition:width 0.3s; border-radius:1px; }
-        .nav-link:hover::after, .nav-link.active::after { width:100%; }
-        .nav-link:hover, .nav-link.active { color:#e8372a !important; }
-        .pill { background:#111; color:#fff; padding:0.8rem 2rem; border-radius:100px; border:none; font-family:'DM Sans',sans-serif; font-size:0.87rem; font-weight:600; cursor:pointer; transition:all 0.25s; overflow:hidden; position:relative; }
+        .pill { background:#111; color:#fff; padding:0.75rem 1.75rem; border-radius:100px; border:none; font-family:'DM Sans',sans-serif; font-size:0.87rem; font-weight:600; cursor:pointer; transition:all 0.25s; }
         .pill:hover { background:#e8372a; transform:translateY(-2px); box-shadow:0 8px 24px #e8372a44; }
-        .sl { font-size:0.72rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#e8372a; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.5rem; }
-        .sl::before { content:''; display:inline-block; width:20px; height:2px; background:#e8372a; border-radius:1px; }
-        @keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(200%)} }
-        @keyframes spin-slow { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
-        @keyframes morph { 0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%} 50%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%} }
+        .sl { font-size:0.7rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#e8372a; margin-bottom:0.55rem; display:flex; align-items:center; gap:0.5rem; }
+        .sl::before { content:''; display:inline-block; width:18px; height:2px; background:#e8372a; border-radius:1px; }
+        .ci { width:100%; background:var(--ci-bg,#f8f8f8); border:1.5px solid var(--ci-border,#ebebeb); border-radius:10px; padding:0.85rem 1rem; color:var(--ci-color,#111); font-family:'DM Sans',sans-serif; font-size:0.88rem; outline:none; transition:all 0.2s; }
+        .ci:focus { border-color:#e8372a; box-shadow:0 0 0 3px #e8372a18; }
+        .ci::placeholder { color:#bbb; }
         @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        @keyframes morph { 0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%} 50%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%} }
+        @keyframes spin-slow { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
         @keyframes pulse-ring { 0%{transform:scale(1);opacity:0.6} 100%{transform:scale(1.8);opacity:0} }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes float-badge { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
+        @keyframes float-badge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
       `}</style>
 
       {/* ── NAV ── */}
-      <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, padding:"1.2rem clamp(1.5rem,6vw,6rem)", background:scrolled?t.navBg:"transparent", backdropFilter:scrolled?"blur(20px)":"none", borderBottom:scrolled?`1px solid ${t.border}`:"none", transition:"all 0.3s", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:"1.1rem", color:t.text }}>
+      <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:200, padding:`1rem ${px}`, background:scrolled||menuOpen?t.navBg:"transparent", backdropFilter:scrolled||menuOpen?"blur(20px)":"none", borderBottom:scrolled||menuOpen?`1px solid ${t.border}`:"none", transition:"all 0.3s", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:"1.05rem", color:t.text }}>
           ravi<span style={{ color:"#e8372a" }}>.</span>dev
         </div>
-        <div style={{ display:"flex", gap:"2.5rem", alignItems:"center" }}>
-          {NAV_LINKS.map(l => (
-            <span key={l} className={`nav-link ${activeSection===l?"active":""}`} style={{ color:t.text2 }} onClick={()=>scrollTo(l)}>{l}</span>
-          ))}
-          <ThemeToggle dark={dark} setDark={setDark} />
-          <button className="pill" style={{ padding:"0.55rem 1.3rem", fontSize:"0.78rem", background:dark?"#e8372a":"#111" }} onClick={()=>scrollTo("Contact")}>Hire Me →</button>
-        </div>
+
+        {/* Desktop nav */}
+        {!isMobile && (
+          <div style={{ display:"flex", gap:"2.2rem", alignItems:"center" }}>
+            {NAV_LINKS.map(l => (
+              <span key={l} onClick={()=>scrollTo(l)}
+                style={{ fontSize:"0.87rem", fontWeight:500, color:activeSection===l?"#e8372a":t.text2, cursor:"pointer", transition:"color 0.2s", borderBottom:activeSection===l?"2px solid #e8372a":"2px solid transparent", paddingBottom:"2px" }}>
+                {l}
+              </span>
+            ))}
+            <ThemeToggle dark={dark} setDark={setDark} />
+            <button className="pill" style={{ padding:"0.5rem 1.2rem", fontSize:"0.78rem", background:dark?"#e8372a":"#111" }} onClick={()=>scrollTo("Contact")}>Hire Me →</button>
+          </div>
+        )}
+
+        {/* Mobile nav — hamburger */}
+        {isMobile && (
+          <div style={{ display:"flex", gap:"0.75rem", alignItems:"center" }}>
+            <ThemeToggle dark={dark} setDark={setDark} />
+            <button onClick={()=>setMenuOpen(o=>!o)}
+              style={{ background:"none", border:"none", cursor:"pointer", display:"flex", flexDirection:"column", gap:"5px", padding:"4px" }}>
+              {[0,1,2].map(i => (
+                <span key={i} style={{ display:"block", width:"22px", height:"2px", background:t.text, borderRadius:"2px",
+                  transform: menuOpen ? (i===0?"rotate(45deg) translate(5px,5px)":i===2?"rotate(-45deg) translate(5px,-5px)":"scaleX(0)") : "none",
+                  transition:"transform 0.3s, opacity 0.3s",
+                  opacity: menuOpen && i===1 ? 0 : 1 }} />
+              ))}
+            </button>
+          </div>
+        )}
       </nav>
 
-      {/* ── HERO ── */}
-      <section style={{ minHeight:"100vh", display:"grid", gridTemplateColumns:"1fr 1fr", alignItems:"center", padding:"0 clamp(1.5rem,6vw,6rem)", paddingTop:"5rem", gap:"2rem", maxWidth:"1280px", margin:"0 auto", position:"relative" }}>
-        <ParticleCanvas dark={dark} />
+      {/* Mobile dropdown menu */}
+      {isMobile && menuOpen && (
+        <div style={{ position:"fixed", top:"57px", left:0, right:0, zIndex:190, background:t.navBg, backdropFilter:"blur(20px)", borderBottom:`1px solid ${t.border}`, padding:"1.25rem 1.5rem 1.5rem", animation:"slideDown 0.25s ease", display:"flex", flexDirection:"column", gap:"0" }}>
+          {NAV_LINKS.map(l => (
+            <div key={l} onClick={()=>scrollTo(l)}
+              style={{ padding:"0.9rem 0", borderBottom:`1px solid ${t.border}`, fontSize:"1rem", fontWeight:500, color:activeSection===l?"#e8372a":t.text, cursor:"pointer", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+              {l} {activeSection===l && <span style={{ color:"#e8372a" }}>→</span>}
+            </div>
+          ))}
+          <div style={{ paddingTop:"1.25rem", display:"flex", gap:"0.75rem" }}>
+            <button className="pill" style={{ flex:1, background:dark?"#e8372a":"#111" }} onClick={()=>scrollTo("Contact")}>Hire Me →</button>
+            <a href={CV_DATA} download="Ravi_Yadav_CV.pdf" style={{ flex:1, textDecoration:"none" }}>
+              <button style={{ width:"100%", background:"transparent", color:t.text, padding:"0.75rem 1rem", borderRadius:"100px", border:`1.5px solid ${t.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:"0.87rem", fontWeight:600, cursor:"pointer" }}>⬇ CV</button>
+            </a>
+          </div>
+        </div>
+      )}
 
-        {/* LEFT */}
-        <div style={{ opacity:heroVisible?1:0, transform:heroVisible?"translateY(0)":"translateY(28px)", transition:"all 0.9s ease", position:"relative", zIndex:2 }}>
-          <div style={{ display:"inline-flex", alignItems:"center", gap:"0.5rem", background:dark?"#1a0a09":"#fff3f2", border:`1px solid ${dark?"#5a1a15":"#ffd5d2"}`, borderRadius:"100px", padding:"0.38rem 1rem", marginBottom:"1.75rem" }}>
+      {/* ── HERO ── */}
+      <section style={{ minHeight:"100vh", display:"flex", flexDirection: isMobile?"column":"row", alignItems:"center", justifyContent:"center", padding:`0 ${px}`, paddingTop: isMobile?"5.5rem":"5rem", gap: isMobile?"0":"2rem", maxWidth:"1280px", margin:"0 auto", position:"relative" }}>
+        <ParticleCanvas />
+
+        {/* Mobile: photo first, then text */}
+        {isMobile && (
+          <div style={{ position:"relative", display:"flex", justifyContent:"center", alignItems:"flex-end", width:"100%", height:"320px", opacity:heroVisible?1:0, transition:"opacity 1s ease 0.2s", flexShrink:0 }}>
+            <div style={{ position:"absolute", bottom:"0", left:"50%", transform:"translateX(-50%)", width:"260px", height:"260px", background:dark?"linear-gradient(135deg,#2a0a08,#1a0505)":"linear-gradient(135deg,#fff0ee,#ffd5d2)", animation:"morph 8s ease-in-out infinite", zIndex:0, borderRadius:"50%" }} />
+            <div style={{ position:"absolute", bottom:"5%", left:"50%", transform:"translateX(-50%)", width:"240px", height:"240px", border:`1px dashed ${dark?"#e8372a55":"#e8372a44"}`, borderRadius:"50%", animation:"spin-slow 20s linear infinite", zIndex:1 }} />
+            <div style={{ position:"relative", zIndex:2, width:"220px", height:"300px", overflow:"hidden" }}>
+              <img src={PHOTO_BW} alt="Ravi Yadav" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center", display:"block", WebkitMaskImage:"linear-gradient(to bottom,black 50%,transparent 100%)", maskImage:"linear-gradient(to bottom,black 50%,transparent 100%)" }} />
+            </div>
+          </div>
+        )}
+
+        {/* Text column */}
+        <div style={{ flex:1, opacity:heroVisible?1:0, transform:heroVisible?"translateY(0)":"translateY(28px)", transition:"all 0.9s ease", position:"relative", zIndex:2, textAlign:isMobile?"center":"left", paddingBottom:isMobile?"2.5rem":"0" }}>
+          <div style={{ display:"inline-flex", alignItems:"center", gap:"0.5rem", background:dark?"#1a0a09":"#fff3f2", border:`1px solid ${dark?"#5a1a15":"#ffd5d2"}`, borderRadius:"100px", padding:"0.35rem 0.9rem", marginBottom:"1.25rem" }}>
             <span style={{ position:"relative", display:"inline-flex" }}>
               <span style={{ width:"7px", height:"7px", background:"#e8372a", borderRadius:"50%", display:"inline-block" }} />
               <span style={{ position:"absolute", width:"7px", height:"7px", background:"#e8372a", borderRadius:"50%", animation:"pulse-ring 1.5s ease-out infinite" }} />
             </span>
-            <span style={{ fontSize:"0.76rem", fontWeight:700, color:"#e8372a", letterSpacing:"0.05em" }}>Open to opportunities</span>
+            <span style={{ fontSize:"0.72rem", fontWeight:700, color:"#e8372a", letterSpacing:"0.05em" }}>Open to opportunities</span>
           </div>
 
-          <div style={{ fontSize:"clamp(2.4rem,5vw,4.2rem)", fontFamily:"'Playfair Display',serif", fontWeight:900, lineHeight:1.06, marginBottom:"1rem" }}>
+          <div style={{ fontSize:isMobile?"clamp(2rem,8vw,2.8rem)":"clamp(2.4rem,5vw,4.2rem)", fontFamily:"'Playfair Display',serif", fontWeight:900, lineHeight:1.1, marginBottom:"0.85rem" }}>
             <div style={{ color:"#e8372a", fontStyle:"italic" }}>I'm Ravi Yadav,</div>
             <div style={{ color:t.text }}>here's my digital</div>
             <div style={{ color:t.text }}>playground.</div>
           </div>
 
-          <div style={{ fontSize:"1.1rem", fontWeight:500, color:t.text2, marginBottom:"1.4rem", height:"1.8rem", display:"flex", alignItems:"center", gap:"2px" }}>
+          <div style={{ fontSize:"1rem", fontWeight:500, color:t.text2, marginBottom:"1.2rem", height:"1.7rem", display:"flex", alignItems:"center", gap:"2px", justifyContent:isMobile?"center":"flex-start" }}>
             <span>{typedText}</span>
-            <span style={{ width:"2px", height:"1.1rem", background:"#e8372a", display:"inline-block", opacity:cursorBlink?1:0, transition:"opacity 0.1s", borderRadius:"1px" }} />
+            <span style={{ width:"2px", height:"1rem", background:"#e8372a", display:"inline-block", opacity:cursorBlink?1:0, transition:"opacity 0.1s", borderRadius:"1px" }} />
           </div>
 
-          <p style={{ color:t.text3, fontSize:"0.95rem", lineHeight:1.82, maxWidth:"430px", marginBottom:"2.25rem" }}>
+          <p style={{ color:t.text3, fontSize:"0.93rem", lineHeight:1.82, maxWidth:isMobile?"100%":"430px", marginBottom:"1.75rem", margin:isMobile?"0 auto 1.75rem":"0 0 1.75rem" }}>
             CS Engineering student at LPU building clean, scalable web experiences. Passionate about DSA, full-stack dev, and AI-powered tools.
           </p>
 
-          <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap" }}>
+          <div style={{ display:"flex", gap:"0.75rem", flexWrap:"wrap", justifyContent:isMobile?"center":"flex-start" }}>
             <button className="pill" style={{ background:dark?"#e8372a":"#111" }} onClick={()=>scrollTo("Projects")}>View Projects →</button>
-            <button onClick={()=>scrollTo("Contact")} style={{ background:"transparent", color:t.text, padding:"0.8rem 2rem", borderRadius:"100px", border:`1.5px solid ${t.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:"0.87rem", fontWeight:600, cursor:"pointer", transition:"all 0.25s" }}
-              onMouseEnter={e=>{e.currentTarget.style.borderColor=t.text;e.currentTarget.style.background=t.bg3}}
-              onMouseLeave={e=>{e.currentTarget.style.borderColor=t.border;e.currentTarget.style.background="transparent"}}>
+            <button onClick={()=>scrollTo("Contact")}
+              style={{ background:"transparent", color:t.text, padding:"0.75rem 1.75rem", borderRadius:"100px", border:`1.5px solid ${t.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:"0.87rem", fontWeight:600, cursor:"pointer", transition:"all 0.25s" }}>
               Get In Touch
             </button>
             <a href={CV_DATA} download="Ravi_Yadav_CV.pdf" style={{ textDecoration:"none" }}>
-              <button style={{ background:"transparent", color:t.text, padding:"0.8rem 2rem", borderRadius:"100px", border:`1.5px solid ${t.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:"0.87rem", fontWeight:600, cursor:"pointer", transition:"all 0.25s", display:"flex", alignItems:"center", gap:"0.5rem" }}
-                onMouseEnter={e=>{e.currentTarget.style.borderColor=t.text;e.currentTarget.style.background=t.bg3}}
-                onMouseLeave={e=>{e.currentTarget.style.borderColor=t.border;e.currentTarget.style.background="transparent"}}>
-                ⬇ Download CV
+              <button style={{ background:"transparent", color:t.text, padding:"0.75rem 1.75rem", borderRadius:"100px", border:`1.5px solid ${t.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:"0.87rem", fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", gap:"0.5rem" }}>
+                ⬇ CV
               </button>
             </a>
           </div>
 
-          <div style={{ display:"flex", gap:"2.5rem", marginTop:"3rem", paddingTop:"2rem", borderTop:`1px solid ${t.border}` }}>
-            {[{n:200,s:"+",l:"Problems Solved"},{n:1000,s:"+",l:"Chess Elo"},{n:5,s:"+",l:"Projects Built"}].map((s,i) => (
-              <div key={i}>
-                <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"2rem", fontWeight:900, color:t.text, lineHeight:1 }}>
+          <div style={{ display:"flex", gap:isMobile?"1.5rem":"2.5rem", marginTop:"2.5rem", paddingTop:"2rem", borderTop:`1px solid ${t.border}`, justifyContent:isMobile?"center":"flex-start" }}>
+            {[{n:200,s:"+",l:"Solved"},{n:1000,s:"+",l:"Chess Elo"},{n:5,s:"+",l:"Projects"}].map((s,i) => (
+              <div key={i} style={{ textAlign:isMobile?"center":"left" }}>
+                <div style={{ fontFamily:"'Playfair Display',serif", fontSize:isMobile?"1.6rem":"2rem", fontWeight:900, color:t.text, lineHeight:1 }}>
                   <Counter target={s.n} suffix={s.s} />
                 </div>
-                <div style={{ fontSize:"0.72rem", color:t.text3, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginTop:"0.3rem" }}>{s.l}</div>
+                <div style={{ fontSize:"0.68rem", color:t.text3, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginTop:"0.25rem" }}>{s.l}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT — photo */}
-        <div style={{ position:"relative", display:"flex", justifyContent:"center", alignItems:"flex-end", height:"600px", opacity:heroVisible?1:0, transition:"opacity 1.2s ease 0.3s" }}>
-          {/* Morphing blob */}
-          <div style={{
-            position:"absolute", bottom:"5%", left:"50%",
-            transform:`translateX(-50%) translate(${mousePos.x*18}px,${mousePos.y*12}px)`,
-            width:"420px", height:"420px",
-            background:dark?"linear-gradient(135deg,#2a0a08,#1a0505)":"linear-gradient(135deg,#fff0ee,#ffd5d2)",
-            animation:"morph 8s ease-in-out infinite",
-            zIndex:0, transition:"transform 0.1s ease-out, background 0.4s",
-          }} />
-          {/* Spinning ring */}
-          <div style={{ position:"absolute", bottom:"12%", left:"50%", transform:"translateX(-50%)", width:"360px", height:"360px", border:`1px dashed ${dark?"#e8372a55":"#e8372a44"}`, borderRadius:"50%", animation:"spin-slow 20s linear infinite", zIndex:1 }} />
-
-          {/* Photo with bottom fade */}
-          <div style={{ position:"relative", zIndex:2, width:"360px", height:"520px", overflow:"hidden" }}>
-            <img src={PHOTO_BW} alt="Ravi Yadav"
-              style={{
-                width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center", display:"block",
-                transform:`scale(1.03) translate(${mousePos.x*-8}px,${mousePos.y*-6}px)`,
-                transition:"transform 0.15s ease-out",
-                WebkitMaskImage:`linear-gradient(to bottom, black 45%, transparent 100%)`,
-                maskImage:`linear-gradient(to bottom, black 45%, transparent 100%)`,
-              }}
-            />
-          </div>
-
-          {/* Floating tech badges */}
-          {[
-            { text:"C++", top:"12%", right:"2%" , delay:"0s" },
-            { text:"React", top:"35%", left:"0%", delay:"0.5s" },
-            { text:"Python", bottom:"28%", right:"0%", delay:"1s" },
-          ].map(b => (
-            <div key={b.text} style={{
-              position:"absolute", top:b.top, bottom:b.bottom, left:b.left, right:b.right,
-              background:dark?"#1a1a1a":"#fff", border:`1.5px solid ${dark?"#3a1a18":"#e8372a22"}`,
-              borderRadius:"12px", padding:"0.5rem 0.9rem",
-              boxShadow:dark?"0 6px 24px rgba(0,0,0,0.5)":"0 6px 24px rgba(0,0,0,0.1)",
-              zIndex:5, animation:"float-badge 3s ease-in-out infinite", animationDelay:b.delay,
-              fontSize:"0.78rem", fontWeight:700, color:"#e8372a", transition:"background 0.4s",
-            }}>
-              {b.text}
+        {/* Desktop photo */}
+        {!isMobile && (
+          <div style={{ position:"relative", display:"flex", justifyContent:"center", alignItems:"flex-end", height:"600px", flex:1, opacity:heroVisible?1:0, transition:"opacity 1.2s ease 0.3s" }}>
+            <div style={{ position:"absolute", bottom:"5%", left:"50%", transform:`translateX(-50%) translate(${mousePos.x*18}px,${mousePos.y*12}px)`, width:"420px", height:"420px", background:dark?"linear-gradient(135deg,#2a0a08,#1a0505)":"linear-gradient(135deg,#fff0ee,#ffd5d2)", animation:"morph 8s ease-in-out infinite", zIndex:0, transition:"transform 0.1s ease-out" }} />
+            <div style={{ position:"absolute", bottom:"12%", left:"50%", transform:"translateX(-50%)", width:"360px", height:"360px", border:`1px dashed ${dark?"#e8372a55":"#e8372a44"}`, borderRadius:"50%", animation:"spin-slow 20s linear infinite", zIndex:1 }} />
+            <div style={{ position:"relative", zIndex:2, width:"360px", height:"520px", overflow:"hidden" }}>
+              <img src={PHOTO_BW} alt="Ravi Yadav" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center", display:"block", transform:`scale(1.03) translate(${mousePos.x*-8}px,${mousePos.y*-6}px)`, transition:"transform 0.15s ease-out", WebkitMaskImage:"linear-gradient(to bottom,black 45%,transparent 100%)", maskImage:"linear-gradient(to bottom,black 45%,transparent 100%)" }} />
             </div>
-          ))}
-        </div>
+            {[{text:"C++",top:"12%",right:"2%",delay:"0s"},{text:"React",top:"35%",left:"0%",delay:"0.5s"},{text:"Python",bottom:"28%",right:"0%",delay:"1s"}].map(b => (
+              <div key={b.text} style={{ position:"absolute", top:b.top, bottom:b.bottom, left:b.left, right:b.right, background:dark?"#1a1a1a":"#fff", border:`1.5px solid ${dark?"#3a1a18":"#e8372a22"}`, borderRadius:"12px", padding:"0.5rem 0.9rem", boxShadow:dark?"0 6px 24px rgba(0,0,0,0.5)":"0 6px 24px rgba(0,0,0,0.1)", zIndex:5, animation:"float-badge 3s ease-in-out infinite", animationDelay:b.delay, fontSize:"0.78rem", fontWeight:700, color:"#e8372a" }}>
+                {b.text}
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* ── TICKER ── */}
-      <div style={{ background:t.tickerBg, padding:"0.85rem 0", overflow:"hidden", transition:"background 0.4s" }}>
+      <div style={{ background:t.tickerBg, padding:"0.8rem 0", overflow:"hidden", transition:"background 0.4s" }}>
         <div style={{ display:"flex", animation:"ticker 22s linear infinite", whiteSpace:"nowrap" }}>
           {[...TECH_STACK,...TECH_STACK].map((tech,i) => (
-            <span key={i} style={{ padding:"0 2rem", fontSize:"0.8rem", fontWeight:700, color:t.tickerText, letterSpacing:"0.08em", textTransform:"uppercase" }}>
-              {tech} <span style={{ color:dark?"#fff":"#e8372a", opacity:0.6 }}>·</span>
+            <span key={i} style={{ padding:"0 1.5rem", fontSize:"0.75rem", fontWeight:700, color:t.tickerText, letterSpacing:"0.08em", textTransform:"uppercase" }}>
+              {tech} <span style={{ color:dark?"rgba(255,255,255,0.4)":"#e8372a", opacity:0.6 }}>·</span>
             </span>
           ))}
         </div>
       </div>
 
       {/* ── ABOUT ── */}
-      <section id="about" style={{ padding:"8rem clamp(1.5rem,6vw,6rem)", background:t.bg2, transition:"background 0.4s" }}>
+      <section id="about" style={{ padding:sectionPad, background:t.bg2, transition:"background 0.4s" }}>
         <div style={{ maxWidth:"1100px", margin:"0 auto" }}>
           <div ref={aboutRef} style={{ opacity:aboutV?1:0, transform:aboutV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease" }}>
             <p className="sl">About me</p>
-            <div style={{ display:"grid", gridTemplateColumns:"1.3fr 1fr", gap:"5rem", alignItems:"start" }}>
+            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1.3fr 1fr", gap:isMobile?"2.5rem":"5rem", alignItems:"start" }}>
               <div>
-                <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, lineHeight:1.18, marginBottom:"1.75rem", color:t.text }}>
+                <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:isMobile?"1.9rem":"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, lineHeight:1.18, marginBottom:"1.4rem", color:t.text }}>
                   Building things that <span style={{ color:"#e8372a", fontStyle:"italic" }}>matter.</span>
                 </h2>
-                <p style={{ color:t.text2, lineHeight:1.9, marginBottom:"1.2rem", fontSize:"0.93rem" }}>
-                  I'm a 6th-semester Computer Science student at <strong style={{ color:t.text }}>Lovely Professional University</strong> (CGPA: 7.01) with a minor in Full Stack Web Development, graduating June 2027.
-                </p>
-                <p style={{ color:t.text2, lineHeight:1.9, marginBottom:"1.2rem", fontSize:"0.93rem" }}>
-                  Currently mastering <strong style={{ color:t.text }}>DSA in C++</strong> for placements while building real-world projects using React, Node.js, Flask, and AI APIs.
-                </p>
-                <p style={{ color:t.text2, lineHeight:1.9, fontSize:"0.93rem" }}>
-                  I also volunteer with an <strong style={{ color:t.text }}>NGO</strong> focused on plant conservation and educating underprivileged students.
-                </p>
+                {["I'm a 6th-semester Computer Science student at Lovely Professional University (CGPA: 7.01) with a minor in Full Stack Web Development, graduating June 2027.",
+                  "Currently mastering DSA in C++ for placements while building real-world projects using React, Node.js, Flask, and AI APIs.",
+                  "I also volunteer with an NGO focused on plant conservation and educating underprivileged students."
+                ].map((para, i) => (
+                  <p key={i} style={{ color:t.text2, lineHeight:1.9, marginBottom:"1rem", fontSize:"0.92rem" }}>{para}</p>
+                ))}
               </div>
               <div>
                 {[
@@ -424,14 +449,12 @@ export default function Portfolio() {
                   ["GitHub","github.com/ravi122004","https://github.com/ravi122004"],
                   ["LinkedIn","linkedin.com/in/ravi-yadav27","https://linkedin.com/in/ravi-yadav27"],
                 ].map(([l,v,href]) => (
-                  <div key={l} style={{ display:"flex", justifyContent:"space-between", padding:"0.8rem 0", borderBottom:`1px solid ${t.border}`, gap:"1rem" }}>
-                    <span style={{ fontSize:"0.74rem", fontWeight:800, color:t.text3, textTransform:"uppercase", letterSpacing:"0.07em", flexShrink:0 }}>{l}</span>
+                  <div key={l} style={{ display:"flex", justifyContent:"space-between", padding:"0.75rem 0", borderBottom:`1px solid ${t.border}`, gap:"0.75rem" }}>
+                    <span style={{ fontSize:"0.7rem", fontWeight:800, color:t.text3, textTransform:"uppercase", letterSpacing:"0.06em", flexShrink:0 }}>{l}</span>
                     {href ? (
-                      <a href={href} target="_blank" rel="noreferrer" style={{ fontSize:"0.84rem", color:"#e8372a", fontWeight:500, textAlign:"right", textDecoration:"none" }}
-                        onMouseEnter={e=>e.target.style.textDecoration="underline"}
-                        onMouseLeave={e=>e.target.style.textDecoration="none"}>{v}</a>
+                      <a href={href} target="_blank" rel="noreferrer" style={{ fontSize:"0.82rem", color:"#e8372a", fontWeight:500, textAlign:"right", textDecoration:"none", wordBreak:"break-all" }}>{v}</a>
                     ) : (
-                      <span style={{ fontSize:"0.84rem", color:t.text, fontWeight:500, textAlign:"right" }}>{v}</span>
+                      <span style={{ fontSize:"0.82rem", color:t.text, fontWeight:500, textAlign:"right" }}>{v}</span>
                     )}
                   </div>
                 ))}
@@ -442,93 +465,91 @@ export default function Portfolio() {
       </section>
 
       {/* ── STATS ── */}
-      <section ref={statsRef} style={{ padding:"4rem clamp(1.5rem,6vw,6rem)", background:t.bg, transition:"background 0.4s" }}>
-        <div style={{ maxWidth:"1100px", margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"2rem", textAlign:"center" }}>
-          {[{n:200,s:"+",l:"Problems Solved",icon:"💻"},{n:1000,s:"+",l:"Chess Elo Rating",icon:"♟️"},{n:5,s:"+",l:"Projects Built",icon:"🚀"},{n:5,s:"",l:"Certifications",icon:"📜"}].map((s,i) => (
-            <div key={i} style={{ opacity:statsV?1:0, transform:statsV?"translateY(0)":"translateY(24px)", transition:`all 0.6s ease ${i*0.1}s`, padding:"1.5rem", border:`1.5px solid ${t.border}`, borderRadius:"16px", background:t.cardBg, transition2:"background 0.4s" }}
+      <section ref={statsRef} style={{ padding:isMobile?"3rem 1.25rem":"4rem clamp(1.5rem,6vw,6rem)", background:t.bg, transition:"background 0.4s" }}>
+        <div style={{ maxWidth:"1100px", margin:"0 auto", display:"grid", gridTemplateColumns:isMobile?"repeat(2,1fr)":"repeat(4,1fr)", gap:"1rem", textAlign:"center" }}>
+          {[{n:200,s:"+",l:"Problems Solved",icon:"💻"},{n:1000,s:"+",l:"Chess Elo",icon:"♟️"},{n:5,s:"+",l:"Projects Built",icon:"🚀"},{n:5,s:"",l:"Certifications",icon:"📜"}].map((s,i) => (
+            <div key={i} style={{ opacity:statsV?1:0, transform:statsV?"translateY(0)":"translateY(24px)", transition:`all 0.6s ease ${i*0.1}s`, padding:"1.25rem 1rem", border:`1.5px solid ${t.border}`, borderRadius:"14px", background:t.cardBg }}
               onMouseEnter={e=>e.currentTarget.style.borderColor="#e8372a"}
               onMouseLeave={e=>e.currentTarget.style.borderColor=t.border}>
-              <div style={{ fontSize:"2rem", marginBottom:"0.5rem" }}>{s.icon}</div>
-              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"2.2rem", fontWeight:900, color:t.text }}>
+              <div style={{ fontSize:"1.75rem", marginBottom:"0.4rem" }}>{s.icon}</div>
+              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"1.9rem", fontWeight:900, color:t.text }}>
                 <Counter target={s.n} suffix={s.s} />
               </div>
-              <div style={{ fontSize:"0.75rem", color:t.text3, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginTop:"0.3rem" }}>{s.l}</div>
+              <div style={{ fontSize:"0.68rem", color:t.text3, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.05em", marginTop:"0.25rem" }}>{s.l}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── SKILLS ── */}
-      <section id="skills" style={{ padding:"8rem clamp(1.5rem,6vw,6rem)", background:t.bg2, transition:"background 0.4s" }}>
+      <section id="skills" style={{ padding:sectionPad, background:t.bg2, transition:"background 0.4s" }}>
         <div style={{ maxWidth:"1100px", margin:"0 auto" }}>
-          <div ref={skillsRef} style={{ opacity:skillsV?1:0, transform:skillsV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease", marginBottom:"3.5rem" }}>
+          <div ref={skillsRef} style={{ opacity:skillsV?1:0, transform:skillsV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease", marginBottom:"2.5rem" }}>
             <p className="sl">Skills</p>
-            <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text }}>What I work with</h2>
+            <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:isMobile?"1.9rem":"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text }}>What I work with</h2>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"0 5rem" }}>
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:isMobile?"0":"0 5rem" }}>
             {SKILLS.map((s,i) => <SkillBar key={s.name} {...s} delay={i*0.07} t={t} />)}
           </div>
         </div>
       </section>
 
       {/* ── PROJECTS ── */}
-      <section id="projects" style={{ padding:"8rem clamp(1.5rem,6vw,6rem)", background:t.bg, transition:"background 0.4s" }}>
+      <section id="projects" style={{ padding:sectionPad, background:t.bg, transition:"background 0.4s" }}>
         <div style={{ maxWidth:"1100px", margin:"0 auto" }}>
           <div ref={projRef} style={{ opacity:projV?1:0, transform:projV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease", marginBottom:"0.5rem" }}>
             <p className="sl">Projects</p>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:"0.5rem" }}>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text }}>Things I've built</h2>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:"0.5rem", flexWrap:"wrap", gap:"1rem" }}>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:isMobile?"1.9rem":"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text }}>Things I've built</h2>
               <a href="https://github.com/ravi122004" target="_blank" rel="noreferrer" style={{ textDecoration:"none" }}>
-                <button style={{ background:"transparent", color:t.text, padding:"0.7rem 1.6rem", borderRadius:"100px", border:`1.5px solid ${t.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:"0.8rem", fontWeight:600, cursor:"pointer", transition:"all 0.25s" }}
-                  onMouseEnter={e=>{e.currentTarget.style.borderColor="#e8372a";e.currentTarget.style.color="#e8372a"}}
-                  onMouseLeave={e=>{e.currentTarget.style.borderColor=t.border;e.currentTarget.style.color=t.text}}>
-                  All on GitHub →
+                <button style={{ background:"transparent", color:t.text, padding:"0.6rem 1.4rem", borderRadius:"100px", border:`1.5px solid ${t.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:"0.78rem", fontWeight:600, cursor:"pointer", transition:"all 0.25s" }}>
+                  GitHub →
                 </button>
               </a>
             </div>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"0 2.5rem" }}>
-            {PROJECTS.map((p,i) => <ProjectCard key={p.title} project={p} delay={i*0.12} t={t} />)}
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3,1fr)", gap:isMobile?"0":"0 2.5rem" }}>
+            {PROJECTS.map((p,i) => <ProjectCard key={p.title} project={p} delay={i*0.1} t={t} />)}
           </div>
         </div>
       </section>
 
       {/* ── CERTS ── */}
-      <section style={{ padding:"7rem clamp(1.5rem,6vw,6rem)", background:t.bg2, transition:"background 0.4s" }}>
+      <section style={{ padding:sectionPad, background:t.bg2, transition:"background 0.4s" }}>
         <div style={{ maxWidth:"1100px", margin:"0 auto" }}>
-          <div ref={certsRef} style={{ opacity:certsV?1:0, transform:certsV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease", marginBottom:"3rem" }}>
+          <div ref={certsRef} style={{ opacity:certsV?1:0, transform:certsV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease", marginBottom:"2.5rem" }}>
             <p className="sl">Certifications</p>
-            <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text }}>Credentials & Training</h2>
+            <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:isMobile?"1.9rem":"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text }}>Credentials & Training</h2>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:"1rem" }}>
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"repeat(2,1fr)":"repeat(5,1fr)", gap:"0.85rem" }}>
             {CERTS.map((c,i) => <CertCard key={i} cert={c} delay={i*0.1} t={t} />)}
           </div>
         </div>
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contact" style={{ padding:"8rem clamp(1.5rem,6vw,6rem)", background:t.bg, transition:"background 0.4s" }}>
+      <section id="contact" style={{ padding:sectionPad, background:t.bg, transition:"background 0.4s" }}>
         <div style={{ maxWidth:"680px", margin:"0 auto" }}>
-          <div ref={contactRef} style={{ textAlign:"center", opacity:contactV?1:0, transform:contactV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease", marginBottom:"3rem" }}>
+          <div ref={contactRef} style={{ textAlign:"center", opacity:contactV?1:0, transform:contactV?"translateY(0)":"translateY(30px)", transition:"all 0.7s ease", marginBottom:"2.5rem" }}>
             <p className="sl" style={{ justifyContent:"center" }}>Contact</p>
-            <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text, marginBottom:"1rem" }}>
+            <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:isMobile?"2rem":"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:900, color:t.text, marginBottom:"0.85rem" }}>
               Let's work <span style={{ color:"#e8372a", fontStyle:"italic" }}>together.</span>
             </h2>
-            <p style={{ color:t.text3, fontSize:"0.93rem", lineHeight:1.8 }}>Open to internships, collaborations, and freelance projects.</p>
+            <p style={{ color:t.text3, fontSize:"0.92rem", lineHeight:1.8 }}>Open to internships, collaborations, and freelance projects.</p>
           </div>
-          <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem" }}>
-              <input className="ci" placeholder="Your Name" style={{ background:t.inputBg, border:`1.5px solid ${t.border}`, color:t.text }} />
-              <input className="ci" placeholder="Your Email" style={{ background:t.inputBg, border:`1.5px solid ${t.border}`, color:t.text }} />
+          <div style={{ display:"flex", flexDirection:"column", gap:"0.85rem" }}>
+            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:"0.85rem" }}>
+              <input className="ci" placeholder="Your Name" style={{"--ci-bg":t.inputBg,"--ci-border":t.border,"--ci-color":t.text}} />
+              <input className="ci" placeholder="Your Email" style={{"--ci-bg":t.inputBg,"--ci-border":t.border,"--ci-color":t.text}} />
             </div>
-            <input className="ci" placeholder="Subject" style={{ background:t.inputBg, border:`1.5px solid ${t.border}`, color:t.text }} />
-            <textarea className="ci" rows={5} placeholder="Your Message" style={{ resize:"vertical", background:t.inputBg, border:`1.5px solid ${t.border}`, color:t.text }} />
+            <input className="ci" placeholder="Subject" style={{"--ci-bg":t.inputBg,"--ci-border":t.border,"--ci-color":t.text}} />
+            <textarea className="ci" rows={5} placeholder="Your Message" style={{ resize:"vertical","--ci-bg":t.inputBg,"--ci-border":t.border,"--ci-color":t.text }} />
             <button className="pill" style={{ alignSelf:"center", marginTop:"0.5rem", background:dark?"#e8372a":"#111" }}>Send Message →</button>
           </div>
-          <div style={{ marginTop:"3.5rem", display:"flex", justifyContent:"center", gap:"2rem", flexWrap:"wrap", borderTop:`1px solid ${t.border}`, paddingTop:"2.5rem" }}>
+          <div style={{ marginTop:"3rem", display:"flex", justifyContent:"center", gap:isMobile?"1.25rem":"2rem", flexWrap:"wrap", borderTop:`1px solid ${t.border}`, paddingTop:"2rem" }}>
             {[["GitHub","https://github.com/ravi122004"],["LinkedIn","https://linkedin.com/in/ravi-yadav27"],["Email","mailto:raviyaduvanshispecial@gmail.com"],["+91 7217284703","tel:+917217284703"]].map(([l,h]) => (
               <a key={l} href={h} target="_blank" rel="noreferrer"
-                style={{ fontSize:"0.83rem", fontWeight:600, color:t.text3, textDecoration:"none", transition:"color 0.2s" }}
+                style={{ fontSize:isMobile?"0.78rem":"0.83rem", fontWeight:600, color:t.text3, textDecoration:"none", transition:"color 0.2s" }}
                 onMouseEnter={e=>e.target.style.color="#e8372a"}
                 onMouseLeave={e=>e.target.style.color=t.text3}>{l}</a>
             ))}
@@ -537,9 +558,9 @@ export default function Portfolio() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ padding:"1.5rem clamp(1.5rem,6vw,6rem)", borderTop:`1px solid ${t.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", background:t.bg2, transition:"background 0.4s" }}>
+      <footer style={{ padding:`1.25rem ${px}`, borderTop:`1px solid ${t.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", background:t.bg2, flexWrap:"wrap", gap:"0.75rem", transition:"background 0.4s" }}>
         <span style={{ fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:"1rem", color:t.text }}>ravi<span style={{ color:"#e8372a" }}>.</span>dev</span>
-        <span style={{ fontSize:"0.76rem", color:t.text3 }}>© 2026 Ravi Yadav · Made with ❤️ in India</span>
+        <span style={{ fontSize:"0.72rem", color:t.text3 }}>© 2026 Ravi Yadav · Made with ❤️ in India</span>
         <ThemeToggle dark={dark} setDark={setDark} />
       </footer>
     </div>
