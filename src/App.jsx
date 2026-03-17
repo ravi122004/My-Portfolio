@@ -451,7 +451,7 @@ export default function Portfolio() {
       {/* ── NAV ── */}
       <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:200, padding:`1rem ${px}`, background:scrolled||menuOpen?t.navBg:"transparent", backdropFilter:scrolled||menuOpen?"blur(20px)":"none", borderBottom:scrolled||menuOpen?`1px solid ${t.border}`:"none", transition:"all 0.3s", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
         <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:"1.05rem", color:t.text }}>
-          ravi<span style={{ color:"#e8372a" }}>.</span>dev
+          Ravi Yadav
         </div>
 
         {/* Desktop nav */}
@@ -533,9 +533,7 @@ export default function Portfolio() {
           </div>
 
           <div style={{ fontSize:isMobile?"clamp(2rem,8vw,2.8rem)":"clamp(2.4rem,5vw,4.2rem)", fontFamily:"'Playfair Display',serif", fontWeight:900, lineHeight:1.1, marginBottom:"0.85rem" }}>
-            <div style={{ color:"#e8372a", fontStyle:"italic" }}>I'm Ravi Yadav,</div>
-            <div style={{ color:t.text }}>here's my digital</div>
-            <div style={{ color:t.text }}>playground.</div>
+            <div style={{ color:"#e8372a", fontStyle:"italic" }}>Ravi Yadav.</div>
           </div>
 
           <div style={{ fontSize:"1rem", fontWeight:500, color:t.text2, marginBottom:"1.2rem", height:"1.7rem", display:"flex", alignItems:"center", gap:"2px", justifyContent:isMobile?"center":"flex-start" }}>
@@ -762,7 +760,7 @@ export default function Portfolio() {
 
       {/* ── FOOTER ── */}
       <footer style={{ padding:`1.25rem ${px}`, borderTop:`1px solid ${t.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", background:t.bg2, flexWrap:"wrap", gap:"0.75rem", transition:"background 0.4s" }}>
-        <span style={{ fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:"1rem", color:t.text }}>ravi<span style={{ color:"#e8372a" }}>.</span>dev</span>
+        <span style={{ fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:"1rem", color:t.text }}>Ravi Yadav</span>
         <span style={{ fontSize:"0.72rem", color:t.text3 }}>© 2026 Ravi Yadav · Made with ❤️ in India</span>
         <ThemeToggle dark={dark} setDark={setDark} />
       </footer>
