@@ -31,8 +31,8 @@ const CERTS = [
 const ACHIEVEMENTS = [
   {
     icon: "💻",
-    title: "200+ Problems Solved",
-    desc: "Solved over 200 programming problems across LeetCode and HackerRank, strengthening problem-solving skills and algorithmic thinking for placement preparation.",
+    title: "600+ Problems Solved",
+    desc: "Solved over 600 programming problems across LeetCode and HackerRank, strengthening problem-solving skills and algorithmic thinking for placement preparation.",
     tag: "Feb 2026",
     color: "#6366f1",
   },
@@ -559,7 +559,7 @@ export default function Portfolio() {
           </div>
 
           <div style={{ display:"flex", gap:isMobile?"1.5rem":"2.5rem", marginTop:"2.5rem", paddingTop:"2rem", borderTop:`1px solid ${t.border}`, justifyContent:isMobile?"center":"flex-start" }}>
-            {[{n:200,s:"+",l:"Solved"},{n:1000,s:"+",l:"Chess Elo"},{n:5,s:"+",l:"Projects"}].map((s,i) => (
+            {[{n:600,s:"+",l:"Solved"},{n:1000,s:"+",l:"Chess Elo"},{n:5,s:"+",l:"Projects"}].map((s,i) => (
               <div key={i} style={{ textAlign:isMobile?"center":"left" }}>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:isMobile?"1.6rem":"2rem", fontWeight:900, color:t.text, lineHeight:1 }}>
                   <Counter target={s.n} suffix={s.s} />
@@ -651,7 +651,7 @@ export default function Portfolio() {
       {/* ── STATS ── */}
       <section ref={statsRef} style={{ padding:isMobile?"3rem 1.25rem":"4rem clamp(1.5rem,6vw,6rem)", background:t.bg, transition:"background 0.4s" }}>
         <div style={{ maxWidth:"1100px", margin:"0 auto", display:"grid", gridTemplateColumns:isMobile?"repeat(2,1fr)":"repeat(4,1fr)", gap:"1rem", textAlign:"center" }}>
-          {[{n:200,s:"+",l:"Problems Solved",icon:"💻"},{n:1000,s:"+",l:"Chess Elo",icon:"♟️"},{n:5,s:"+",l:"Projects Built",icon:"🚀"},{n:5,s:"",l:"Certifications",icon:"📜"}].map((s,i) => (
+          {[{n:600,s:"+",l:"Problems Solved",icon:"💻"},{n:1000,s:"+",l:"Chess Elo",icon:"♟️"},{n:5,s:"+",l:"Projects Built",icon:"🚀"},{n:5,s:"",l:"Certifications",icon:"📜"}].map((s,i) => (
             <div key={i} style={{ opacity:statsV?1:0, transform:statsV?"translateY(0)":"translateY(24px)", transition:`all 0.6s ease ${i*0.1}s`, padding:"1.25rem 1rem", border:`1.5px solid ${t.border}`, borderRadius:"14px", background:t.cardBg }}
               onMouseEnter={e=>e.currentTarget.style.borderColor="#e8372a"}
               onMouseLeave={e=>e.currentTarget.style.borderColor=t.border}>
