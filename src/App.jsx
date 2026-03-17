@@ -28,6 +28,51 @@ const CERTS = [
   { icon: "🌐", title: "Coursera", sub: "Bits & Bytes of Networking" },
 ];
 
+const ACHIEVEMENTS = [
+  {
+    icon: "💻",
+    title: "200+ Problems Solved",
+    desc: "Solved over 200 programming problems across LeetCode and HackerRank, strengthening problem-solving skills and algorithmic thinking for placement preparation.",
+    tag: "Feb 2026",
+    color: "#6366f1",
+  },
+  {
+    icon: "♟️",
+    title: "Chess Elo 1000+",
+    desc: "Built a competitive chess Elo rating of 1000+ by consistently improving tactical awareness, decision-making under pressure, and strategic planning.",
+    tag: "Jan 2026",
+    color: "#f59e0b",
+  },
+  {
+    icon: "🏆",
+    title: "Walmart Global Tech Simulation",
+    desc: "Completed Walmart Global Tech's Advanced Software Engineering job simulation — gained hands-on experience with advanced data structures, scalable system design, and professional engineering workflows.",
+    tag: "Oct – Nov 2025",
+    color: "#e8372a",
+  },
+  {
+    icon: "🌱",
+    title: "NGO Community Service",
+    desc: "Received Community Service & Volunteering Certification from an NGO focused on plant conservation and providing free education to underprivileged students.",
+    tag: "Jun 2024",
+    color: "#10b981",
+  },
+  {
+    icon: "📡",
+    title: "Computer Networking — Coursera",
+    desc: "Earned a verified certificate for 'The Bits and Bytes of Computer Networking' on Coursera, covering TCP/IP, DNS, network layers, and protocols.",
+    tag: "Sept 2024",
+    color: "#3b82f6",
+  },
+  {
+    icon: "🤖",
+    title: "Generative AI — Infosys",
+    desc: "Certified in building Generative AI apps and solutions using no-code tools by Infosys — explored real-world AI application development without traditional coding barriers.",
+    tag: "Apr 2025",
+    color: "#8b5cf6",
+  },
+];
+
 const LIGHT = {
   bg:"#ffffff", bg2:"#fafafa", bg3:"#f5f5f5",
   text:"#111111", text2:"#555555", text3:"#888888",
@@ -173,6 +218,136 @@ function CertCard({ cert, delay, t }) {
   );
 }
 
+// ── Education Timeline ────────────────────────────
+function EduTimeline({ t }) {
+  const [ref, visible] = useInView(0.1);
+  const items = [
+    {
+      year: "Aug 2023 – June 2027",
+      degree: "B.Tech — Computer Science & Engineering",
+      school: "Lovely Professional University",
+      place: "Ludhiana, Punjab",
+      score: "CGPA: 7.01",
+      icon: "🎓",
+      current: true,
+    },
+    {
+      year: "",
+      degree: "Intermediate (12th)",
+      school: "Kendriya Vidya Niketan, Sihavali",
+      place: "Uttar Pradesh",
+      score: "88.2%",
+      icon: "📚",
+    },
+    {
+      year: "",
+      degree: "Matriculation",
+      school: "Kendriya Vidya Niketan, Sihavali",
+      place: "Uttar Pradesh",
+      score: "87.6%",
+      icon: "🏫",
+    },
+  ];
+  return (
+    <section style={{ background: t.bg, padding: "7rem clamp(1.2rem,5vw,6rem)", transition: "background 0.4s" }}>
+      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+        <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(28px)", transition: "all 0.7s ease", marginBottom: "3rem" }}>
+          <p className="sl">Education</p>
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.7rem,4vw,2.8rem)", fontWeight: 900, color: t.text }}>
+            My academic <span style={{ color: "#e8372a", fontStyle: "italic" }}>journey.</span>
+          </h2>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          {items.map((item, i) => (
+            <EduCard key={i} item={item} index={i} t={t} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EduCard({ item, index, t }) {
+  const [ref, visible] = useInView(0.2);
+  const [hov, setHov] = useState(false);
+  return (
+    <div ref={ref} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{ position: "relative", marginBottom: "1rem", opacity: visible ? 1 : 0, transform: visible ? "translateX(0)" : "translateX(-30px)", transition: `all 0.6s ease ${index * 0.15}s` }}>
+
+      {/* Card */}
+      <div style={{ background: hov ? (item.current ? "#e8372a" : t.bg3) : t.cardBg, border: `1.5px solid ${hov ? "#e8372a" : t.border}`, borderRadius: "16px", padding: "1.4rem 1.75rem", transition: "all 0.3s", boxShadow: hov ? "0 10px 36px #e8372a22" : t.shadow }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.6rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+            <span style={{ fontSize: "1.5rem" }}>{item.icon}</span>
+            <div>
+              <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 700, color: hov ? (item.current ? "#fff" : t.text) : t.text }}>{item.degree}</div>
+              <div style={{ fontSize: "0.82rem", color: hov ? (item.current ? "rgba(255,255,255,0.85)" : t.text2) : t.text2, marginTop: "0.1rem" }}>{item.school}</div>
+            </div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "0.72rem", fontWeight: 700, color: hov ? (item.current ? "rgba(255,255,255,0.75)" : "#e8372a") : "#e8372a", textTransform: "uppercase", letterSpacing: "0.06em" }}>{item.year}</div>
+            <div style={{ fontSize: "0.78rem", color: hov ? (item.current ? "rgba(255,255,255,0.75)" : t.text3) : t.text3, marginTop: "0.15rem" }}>{item.place}</div>
+          </div>
+        </div>
+        <div style={{ display: "inline-block", background: hov ? "rgba(255,255,255,0.2)" : "#e8372a14", borderRadius: "6px", padding: "0.25rem 0.75rem", marginTop: "0.3rem" }}>
+          <span style={{ fontSize: "0.78rem", fontWeight: 700, color: hov ? (item.current ? "#fff" : "#e8372a") : "#e8372a", letterSpacing: "0.04em" }}>
+            {item.score} {item.current && "· Currently Enrolled"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Achievement card ──────────────────────────────
+function AchievementCard({ item, index, t }) {
+  const [ref, visible] = useInView(0.1);
+  const [hov, setHov] = useState(false);
+  return (
+    <div ref={ref} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        background: hov ? item.color : t.cardBg,
+        border: `1.5px solid ${hov ? item.color : t.border}`,
+        borderRadius: "16px",
+        padding: "1.6rem 1.75rem",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: `all 0.55s ease ${index * 0.08}s`,
+        boxShadow: hov ? `0 14px 40px ${item.color}33` : t.shadow,
+        cursor: "default",
+      }}>
+      {/* Top row */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.9rem" }}>
+        <span style={{ fontSize: "2rem", lineHeight: 1 }}>{item.icon}</span>
+        <span style={{
+          fontSize: "0.68rem", fontWeight: 800, letterSpacing: "0.06em",
+          textTransform: "uppercase", color: hov ? "rgba(255,255,255,0.8)" : item.color,
+          background: hov ? "rgba(255,255,255,0.15)" : `${item.color}18`,
+          padding: "0.2rem 0.65rem", borderRadius: "100px",
+        }}>{item.tag}</span>
+      </div>
+      {/* Title */}
+      <h3 style={{
+        fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 700,
+        color: hov ? "#fff" : t.text, marginBottom: "0.6rem", lineHeight: 1.3,
+      }}>{item.title}</h3>
+      {/* Desc */}
+      <p style={{
+        fontSize: "0.82rem", color: hov ? "rgba(255,255,255,0.85)" : t.text2,
+        lineHeight: 1.75,
+      }}>{item.desc}</p>
+      {/* Bottom accent line */}
+      <div style={{
+        marginTop: "1rem", height: "2px", borderRadius: "1px",
+        background: hov ? "rgba(255,255,255,0.3)" : `${item.color}33`,
+        width: hov ? "100%" : "40%",
+        transition: "width 0.4s ease",
+      }} />
+    </div>
+  );
+}
+
 function ThemeToggle({ dark, setDark }) {
   return (
     <button onClick={()=>setDark(d=>!d)}
@@ -244,6 +419,7 @@ export default function Portfolio() {
   const [skillsRef, skillsV] = useInView();
   const [projRef, projV] = useInView();
   const [certsRef, certsV] = useInView();
+  const [achRef, achV] = useInView();
   const [contactRef, contactV] = useInView();
 
   const px = isMobile ? "1.25rem" : "clamp(1.5rem,6vw,6rem)";
@@ -444,9 +620,11 @@ export default function Portfolio() {
               <div>
                 {[
                   ["University","Lovely Professional University",null],
-                  ["CGPA","7.01 / 10",null],
+                  ["B.Tech CGPA","7.01 / 10",null],
                   ["Semester","6th · Minor: Full Stack",null],
                   ["Graduation","June 2027",null],
+                  ["Intermediate","KVN Sihavali, UP · 88.2%",null],
+                  ["Matriculation","KVN Sihavali, UP · 87.6%",null],
                   ["Location","Ludhiana, Punjab, India",null],
                   ["Email","raviyaduvanshispecial@gmail.com","mailto:raviyaduvanshispecial@gmail.com"],
                   ["Mobile","+91 7217284703","tel:+917217284703"],
@@ -468,6 +646,9 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
+      {/* ── EDUCATION TIMELINE ── */}
+      <EduTimeline t={t} />
 
       {/* ── STATS ── */}
       <section ref={statsRef} style={{ padding:isMobile?"3rem 1.25rem":"4rem clamp(1.5rem,6vw,6rem)", background:t.bg, transition:"background 0.4s" }}>
@@ -528,6 +709,23 @@ export default function Portfolio() {
           </div>
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"repeat(2,1fr)":"repeat(5,1fr)", gap:"0.85rem" }}>
             {CERTS.map((c,i) => <CertCard key={i} cert={c} delay={i*0.1} t={t} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ACHIEVEMENTS ── */}
+      <section style={{ background: t.bg, padding: "7rem clamp(1.2rem,5vw,6rem)", transition: "background 0.4s" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div ref={achRef} style={{ opacity: achV ? 1 : 0, transform: achV ? "translateY(0)" : "translateY(28px)", transition: "all 0.7s ease", marginBottom: "3rem" }}>
+            <p className="sl">Achievements</p>
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.7rem,4vw,2.8rem)", fontWeight: 900, color: t.text }}>
+              Beyond the <span style={{ color: "#e8372a", fontStyle: "italic" }}>code.</span>
+            </h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: "1.25rem" }}>
+            {ACHIEVEMENTS.map((item, i) => (
+              <AchievementCard key={i} item={item} index={i} t={t} />
+            ))}
           </div>
         </div>
       </section>
