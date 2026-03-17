@@ -334,9 +334,9 @@ export default function Portfolio() {
         {/* Mobile: photo first, then text */}
         {isMobile && (
           <div style={{ position:"relative", display:"flex", justifyContent:"center", alignItems:"flex-end", width:"100%", height:"320px", opacity:heroVisible?1:0, transition:"opacity 1s ease 0.2s", flexShrink:0 }}>
-            <div style={{ position:"absolute", bottom:"0", left:"50%", transform:"translateX(-50%)", width:"260px", height:"260px", background:dark?"linear-gradient(135deg,#2a0a08,#1a0505)":"linear-gradient(135deg,#fff0ee,#ffd5d2)", animation:"morph 8s ease-in-out infinite", zIndex:0, borderRadius:"50%" }} />
-            <div style={{ position:"absolute", bottom:"5%", left:"50%", transform:"translateX(-50%)", width:"240px", height:"240px", border:`1px dashed ${dark?"#e8372a55":"#e8372a44"}`, borderRadius:"50%", animation:"spin-slow 20s linear infinite", zIndex:1 }} />
-            <div style={{ position:"relative", zIndex:2, width:"220px", height:"300px", overflow:"hidden" }}>
+            <div style={{ position:"absolute", bottom:"0", left:"50%", transform:"translateX(-50%)", width:"210px", height:"210px", background:dark?"linear-gradient(135deg,#2a0a08,#1a0505)":"linear-gradient(135deg,#fff0ee,#ffd5d2)", animation:"morph 8s ease-in-out infinite", zIndex:0, borderRadius:"50%" }} />
+            <div style={{ position:"absolute", bottom:"5%", left:"50%", transform:"translateX(-50%)", width:"185px", height:"185px", border:`1px dashed ${dark?"#e8372a55":"#e8372a44"}`, borderRadius:"50%", animation:"spin-slow 20s linear infinite", zIndex:1 }} />
+            <div style={{ position:"relative", zIndex:2, width:"170px", height:"230px", overflow:"hidden" }}>
               <img src={PHOTO_BW} alt="Ravi Yadav" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center", display:"block", WebkitMaskImage:"linear-gradient(to bottom,black 50%,transparent 100%)", maskImage:"linear-gradient(to bottom,black 50%,transparent 100%)" }} />
             </div>
           </div>
@@ -350,6 +350,10 @@ export default function Portfolio() {
               <span style={{ position:"absolute", width:"7px", height:"7px", background:"#e8372a", borderRadius:"50%", animation:"pulse-ring 1.5s ease-out infinite" }} />
             </span>
             <span style={{ fontSize:"0.72rem", fontWeight:700, color:"#e8372a", letterSpacing:"0.05em" }}>Open to opportunities</span>
+          </div>
+
+          <div style={{ fontSize:"clamp(0.75rem,2vw,0.85rem)", fontWeight:700, color:t.text3, letterSpacing:"0.06em", textTransform:"uppercase", marginBottom:"0.75rem" }}>
+            Aspiring &amp; Enthusiastic <span style={{ color:"#e8372a" }}>Full Stack Developer</span>
           </div>
 
           <div style={{ fontSize:isMobile?"clamp(2rem,8vw,2.8rem)":"clamp(2.4rem,5vw,4.2rem)", fontFamily:"'Playfair Display',serif", fontWeight:900, lineHeight:1.1, marginBottom:"0.85rem" }}>
@@ -448,6 +452,7 @@ export default function Portfolio() {
                   ["Mobile","+91 7217284703","tel:+917217284703"],
                   ["GitHub","github.com/ravi122004","https://github.com/ravi122004"],
                   ["LinkedIn","linkedin.com/in/ravi-yadav27","https://linkedin.com/in/ravi-yadav27"],
+                  ["LeetCode","leetcode.com/u/ravii_ydvv","https://leetcode.com/u/ravii_ydvv/"],
                 ].map(([l,v,href]) => (
                   <div key={l} style={{ display:"flex", justifyContent:"space-between", padding:"0.75rem 0", borderBottom:`1px solid ${t.border}`, gap:"0.75rem" }}>
                     <span style={{ fontSize:"0.7rem", fontWeight:800, color:t.text3, textTransform:"uppercase", letterSpacing:"0.06em", flexShrink:0 }}>{l}</span>
@@ -547,7 +552,7 @@ export default function Portfolio() {
             <button className="pill" style={{ alignSelf:"center", marginTop:"0.5rem", background:dark?"#e8372a":"#111" }}>Send Message →</button>
           </div>
           <div style={{ marginTop:"3rem", display:"flex", justifyContent:"center", gap:isMobile?"1.25rem":"2rem", flexWrap:"wrap", borderTop:`1px solid ${t.border}`, paddingTop:"2rem" }}>
-            {[["GitHub","https://github.com/ravi122004"],["LinkedIn","https://linkedin.com/in/ravi-yadav27"],["Email","mailto:raviyaduvanshispecial@gmail.com"],["+91 7217284703","tel:+917217284703"]].map(([l,h]) => (
+            {[["GitHub","https://github.com/ravi122004"],["LinkedIn","https://linkedin.com/in/ravi-yadav27"],["LeetCode","https://leetcode.com/u/ravii_ydvv/"],["Email","mailto:raviyaduvanshispecial@gmail.com"],["+91 7217284703","tel:+917217284703"]].map(([l,h]) => (
               <a key={l} href={h} target="_blank" rel="noreferrer"
                 style={{ fontSize:isMobile?"0.78rem":"0.83rem", fontWeight:600, color:t.text3, textDecoration:"none", transition:"color 0.2s" }}
                 onMouseEnter={e=>e.target.style.color="#e8372a"}
