@@ -35,6 +35,8 @@ const ACHIEVEMENTS = [
     desc: "Solved over 300 programming problems across LeetCode and HackerRank, strengthening problem-solving skills and algorithmic thinking for placement preparation.",
     tag: "Feb 2026",
     color: "#6366f1",
+    link: "https://codolio.com/profile/ravi_yadav/problemSolving/leetcode",
+    linkLabel: "View Profile →",
   },
   {
     icon: "♟️",
@@ -344,6 +346,20 @@ function AchievementCard({ item, index, t }) {
         width: hov ? "100%" : "40%",
         transition: "width 0.4s ease",
       }} />
+      {/* Link button if present */}
+      {item.link && (
+        <a href={item.link} target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
+          <div style={{
+            marginTop: "1rem", display: "inline-flex", alignItems: "center", gap: "0.3rem",
+            fontSize: "0.75rem", fontWeight: 700,
+            color: hov ? "rgba(255,255,255,0.9)" : item.color,
+            borderBottom: `1px solid ${hov ? "rgba(255,255,255,0.4)" : item.color + "55"}`,
+            paddingBottom: "1px", transition: "all 0.2s",
+          }}>
+            {item.linkLabel || "View →"}
+          </div>
+        </a>
+      )}
     </div>
   );
 }
@@ -748,7 +764,7 @@ export default function Portfolio() {
             <button className="pill" style={{ alignSelf:"center", marginTop:"0.5rem", background:dark?"#e8372a":"#111" }}>Send Message →</button>
           </div>
           <div style={{ marginTop:"3rem", display:"flex", justifyContent:"center", gap:isMobile?"1.25rem":"2rem", flexWrap:"wrap", borderTop:`1px solid ${t.border}`, paddingTop:"2rem" }}>
-            {[["GitHub","https://github.com/ravi122004"],["LinkedIn","https://linkedin.com/in/ravi-yadav27"],["LeetCode","https://leetcode.com/u/ravii_ydvv/"],["Email","mailto:raviyaduvanshispecial@gmail.com"],["+91 7217284703","tel:+917217284703"]].map(([l,h]) => (
+            {[["GitHub","https://github.com/ravi122004"],["LinkedIn","https://linkedin.com/in/ravi-yadav27"],["LeetCode","https://leetcode.com/u/ravii_ydvv/"],["Email","mailto:raviyaduvanshispecial@gmail.com"],["+91 7217284703","tel:+917217284703"],["Codolio","https://codolio.com/profile/ravi_yadav/problemSolving/leetcode"]].map(([l,h]) => (
               <a key={l} href={h} target="_blank" rel="noreferrer"
                 style={{ fontSize:isMobile?"0.78rem":"0.83rem", fontWeight:600, color:t.text3, textDecoration:"none", transition:"color 0.2s" }}
                 onMouseEnter={e=>e.target.style.color="#e8372a"}
